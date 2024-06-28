@@ -27,6 +27,8 @@ void Window::loop() {
     while (!glfwWindowShouldClose(this->win)) {
         glClear(GL_DEPTH_BUFFER_BIT);
 
+        this->loop_fn();
+
         glfwSwapBuffers(this->win);
         glfwPollEvents();
     }
