@@ -27,7 +27,7 @@ int main(int argc, const char *argv[]) { \
     } \
 \
     inst.setup( args ); \
-\
+    win.loop(); \
     inst.teardown(); \
 \
     return 0; \

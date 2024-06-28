@@ -19,6 +19,7 @@ add_library(deps STATIC ${SRC_FILES})
 
 find_package(glfw3 3.3 REQUIRED)
 target_link_libraries(deps glfw)
+target_link_libraries(deps GL)
 
 # Gather all source files from test/ (non-recursive)
 file(GLOB TEST_FILES test/*.c test/*.cpp)

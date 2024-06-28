@@ -3,6 +3,6 @@
 namespace fglw {
 
 App::App(fglw::Window& win) {
-    // yay :)
+    win.on_loop([&]() { this->update(); });
 }
 }
