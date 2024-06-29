@@ -25,8 +25,6 @@ Window::Window(int width, int height, const std::string& title) {
 void Window::loop() {
     glfwMakeContextCurrent(this->win);
     while (!glfwWindowShouldClose(this->win)) {
-        glClear(GL_DEPTH_BUFFER_BIT);
-
         this->loop_fn();
 
         glfwSwapBuffers(this->win);
@@ -34,5 +32,9 @@ void Window::loop() {
     }
 
     glfwDestroyWindow(this->win);
+}
+
+void Window::bind() {
+    glfwMakeContextCurrent(this->win);
 }
 }

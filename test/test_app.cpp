@@ -9,7 +9,6 @@ public:
     FGLW_ENABLE_APP;
 
     virtual void setup(std::vector<const char *> argv) override {
-        std::cout << "Setup" << std::endl;
         this->start = std::chrono::high_resolution_clock::now();
     }
     virtual void update() override {
@@ -17,11 +16,9 @@ public:
         auto time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
             // set the screen to a yellow color tranitioning to green
-        glClearColor(powf(sinf(time.count() * 3.14 / 1000.0), 2.0f), 1.0, 0.0, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT);
+        this->win.clear(glm::vec3(powf(sinf(time.count() * 3.14 / 1000.0), 2.0f), 1.0, 0.0));
     }
     virtual void teardown() override {
-        std::cout << "Teardown" << std::endl;
     }
 
 private:

@@ -6,9 +6,11 @@
 #include <string>
 #include <functional>
 
+#include <fglw/framebuffer.hpp>
+
 namespace fglw {
 
-class Window {
+class Window : public Framebuffer {
 public:
     using LoopCallback = std::function<void()>;
 
@@ -17,6 +19,8 @@ public:
     void on_loop(LoopCallback fn) { loop_fn = fn; }
 
     void loop();
+
+    virtual void bind() override;
 private:
     GLFWwindow *win;
     LoopCallback loop_fn;

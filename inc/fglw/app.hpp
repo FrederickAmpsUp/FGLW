@@ -12,9 +12,10 @@ public:
     virtual void setup(std::vector<const char *> argv) = 0;
     virtual void update() = 0;
     virtual void teardown() = 0;
+protected:
+    fglw::Window& win;
 };
 
- // TODO: window manages loop
 #define FGLW_DEFINE_APP(app, title, width, height) \
 int main(int argc, const char *argv[]) { \
     const std::string TITLE = (title); \

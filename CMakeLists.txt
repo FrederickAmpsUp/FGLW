@@ -20,6 +20,7 @@ add_library(deps STATIC ${SRC_FILES})
 find_package(glfw3 3.3 REQUIRED)
 target_link_libraries(deps glfw)
 target_link_libraries(deps GL)
+target_link_libraries(deps GLU)
 
 # Gather all source files from test/ (non-recursive)
 file(GLOB TEST_FILES test/*.c test/*.cpp)
@@ -49,3 +50,5 @@ endforeach()
 
 # Install the run executables
 install(TARGETS ${RUN_NAME} DESTINATION /usr/bin)
+
+file(COPY ${CMAKE_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR})
