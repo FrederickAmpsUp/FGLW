@@ -20,6 +20,8 @@ public:
 
     void loop();
 
+    float run_time() const { glfwMakeContextCurrent(this->win); return glfwGetTime(); }
+
     virtual void bind() override;
 private:
     GLFWwindow *win;

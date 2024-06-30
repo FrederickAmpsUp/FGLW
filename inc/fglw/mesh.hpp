@@ -10,6 +10,7 @@
 #include <fglw/framebuffer.hpp>
 #include <fglw/shader.hpp>
 #include <GL/glu.h>
+#include <iostream>
 
 namespace fglw {
 
@@ -44,13 +45,14 @@ public:
         glGenBuffers(1, &this->VBO);
         glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
         glGenBuffers(1, &this->EBO);
+
+        this->ready = false;
     }
 
     TriangleMesh(std::vector<V> vertices, std::vector<size_t> indices) : TriangleMesh() {
         this->vertices = vertices;
         this->indices = indices;
         this->ready = false;
-        this->construct();
     }
 
     TriangleMesh(std::vector<std::array<V, 3>> triangles) : TriangleMesh() {
@@ -58,7 +60,6 @@ public:
             this->add_triangle(a, b, c);
         }
         this->ready = false;
-        this->construct();
     }
 
     void add_triangle(V a, V b, V c) {

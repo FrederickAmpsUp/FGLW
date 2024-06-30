@@ -48,7 +48,7 @@ void VertexAttributeLayout::use() const {
     for (const auto& [type, count, sz] : this->attribs) {
         glVertexAttribPointer(i, count, type, GL_FALSE, this->stride, (void *)offset);
         glEnableVertexAttribArray(i);
-        offset += sz;
+        offset += sz * count;
         i++;
     }
 }
