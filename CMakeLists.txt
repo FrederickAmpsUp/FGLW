@@ -14,13 +14,21 @@ link_directories(lib/)
 # Gather all source files from src/ recursively
 file(GLOB_RECURSE SRC_FILES src/*.c src/*.cpp)
 
+if(EMSCRIPTEN)
+    set(CMAKE_EXECUTABLE_SUFFIX ".html")
+    add_definitions(-DBX_CONFIG_DEBUG)
+else()
+endif()
+
 # Create a static library from the gathered source files
 add_library(deps STATIC ${SRC_FILES})
 
-find_package(glfw3 3.3 REQUIRED)
-target_link_libraries(deps glfw)
-target_link_libraries(deps GL)
-target_link_libraries(deps GLU)
+if(EMSCRIPTEN)
+    target_link_options(deps PRIVATE "-s USE_GLFW=3" "-s FULL_ES2=1")
+else()
+    find_package(glfw3 3.3 REQUIRED)
+    target_link_libraries(deps glfw GL GLU)
+endif()
 
 # Gather all source files from test/ (non-recursive)
 file(GLOB TEST_FILES test/*.c test/*.cpp)
