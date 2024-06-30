@@ -20,6 +20,7 @@ public:
     FGLW_ENABLE_APP;
 
     virtual void setup(std::vector<const char *> args) override {
+        std::cout << "TEST" << std::endl;
         mesh = fglw::TriangleMesh<VertexData>();
 
         mesh.add_triangle(
@@ -39,7 +40,7 @@ public:
         this->win.clear(glm::vec3(0.1, 0.1, 0.1));
 
         this->object = glm::identity<glm::mat4x4>();
-        this->object = glm::rotate(this->object, this->win.run_time(), glm::vec3(0.0f, 1.0f, 0.0f));
+        this->object = glm::rotate(this->object, this->win.run_time(), glm::vec3(0.1f, 1.0f, 0.0f));
 
         this->shader.uniform("proj", this->projection);
         this->shader.uniform("view", this->view);

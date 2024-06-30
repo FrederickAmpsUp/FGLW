@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include <chrono>
+#include <array>
 
 struct MeshVertexData {
 public:
@@ -24,10 +25,9 @@ public:
     FGLW_ENABLE_APP;
 
     virtual void setup(std::vector<const char *> argv) override {
-        this->start = std::chrono::high_resolution_clock::now();
 
         mesh = fglw::TriangleMesh<MeshVertexData>(std::vector{
-            std::array{
+            std::array<MeshVertexData, 3>{
                 MeshVertexData{glm::vec3(-0.5f, -0.5f, 0.0f)},
                 MeshVertexData{glm::vec3( 0.5f, -0.5f, 0.0f)},
                 MeshVertexData{glm::vec3( 0.0f,  0.5f, 0.0f)}}
@@ -36,11 +36,9 @@ public:
         shader = fglw::ShaderProgram::loadGLSLFiles("assets/shaders/01-triangle-mesh.vsh", "assets/shaders/01-triangle-mesh.fsh");
     }
     virtual void update() override {
-        auto end = std::chrono::high_resolution_clock::now();
-        auto time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
             // set the screen to a yellow color tranitioning to green
-        this->win.clear(glm::vec3(powf(sinf(time.count() * 3.14 / 1000.0), 2.0f), 1.0, 0.0));
+        this->win.clear(glm::vec3(1.0, 1.0, 0.0));
         
         mesh.draw(this->win, shader);
     }
@@ -48,7 +46,6 @@ public:
     }
 
 private:
-    std::chrono::_V2::system_clock::time_point start;
     fglw::TriangleMesh<MeshVertexData> mesh;
     fglw::ShaderProgram shader;
 };
