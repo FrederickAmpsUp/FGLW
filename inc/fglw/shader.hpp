@@ -4,6 +4,7 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <fglw/log.hpp>
+#include <fglw/texture.hpp>
 
 namespace fglw {
 
@@ -32,8 +33,11 @@ public:
     void uniform(GLint location, glm::mat3 value);
     void uniform(GLint location, glm::mat4 value);
 
+    void uniform(GLint location, fglw::Texture& value);
+
     template<typename T>
     void uniform(const std::string& name, T value) {
+        this->bind();
         GLint location = glGetUniformLocation(this->programID, name.c_str());
         if(location != -1) {
             this->uniform(location, value);

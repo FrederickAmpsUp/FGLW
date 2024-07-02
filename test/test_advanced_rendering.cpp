@@ -2,6 +2,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image/stb_image.h>
+
 struct VertexData {
     glm::vec3 position;
     glm::vec3 normal = glm::vec3(1.0f);
@@ -26,7 +29,12 @@ public:
         mesh.add_triangle(
             VertexData{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
             VertexData{glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
-            VertexData{glm::vec3( 0.0f,  0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f)}
+            VertexData{glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f)}
+        );
+        mesh.add_triangle(
+            VertexData{glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)},
+            VertexData{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
+            VertexData{glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f)}
         );
 
         shader = fglw::ShaderProgram::loadGLSLFiles("assets/shaders/02-advanced-rendering.vsh", "assets/shaders/02-advanced-rendering.fsh");
@@ -34,6 +42,21 @@ public:
         this->object = glm::identity<glm::mat4x4>();
         this->view = glm::lookAt(glm::vec3(0.0f, 1.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         this->projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+        stbi_set_flip_vertically_on_load(true);
+        int width, height, channels;
+        unsigned char *data = stbi_load("assets/images/test_dev_texture.jpg", &width, &height, &channels, 0);
+        if (channels == 3)
+            this->texture0 = fglw::Texture(width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+        stbi_image_free(data);
+
+        data = stbi_load("assets/images/test_nyancat.png", &width, &height, &channels, 0);
+        if (channels == 3)
+            this->texture1 = fglw::Texture(width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+        this->shader.uniform("tex0", this->texture0);
+        this->shader.uniform("tex1", this->texture1);
     }
 
     virtual void update() override {
@@ -55,6 +78,7 @@ public:
 private:
     fglw::TriangleMesh<VertexData> mesh;
     fglw::ShaderProgram shader;
+    fglw::Texture texture0, texture1;
     glm::mat4x4 object, view, projection;
 };
 

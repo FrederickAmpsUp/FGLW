@@ -102,48 +102,41 @@ void ShaderProgram::bind() {
 }
 
 void ShaderProgram::uniform(GLint location, int value) {
-    this->bind();
     glUniform1i(location, value);
 }
 void ShaderProgram::uniform(GLint location, glm::ivec2 value) {
-    this->bind();
     glUniform2i(location, value.x, value.y);
 }
 void ShaderProgram::uniform(GLint location, glm::ivec3 value) {
-    this->bind();
     glUniform3i(location, value.x, value.y, value.z);
 }
 void ShaderProgram::uniform(GLint location, glm::ivec4 value) {
-    this->bind();
     glUniform4i(location, value.x, value.y, value.z, value.w);
 }
 
 void ShaderProgram::uniform(GLint location, float value) {
-    this->bind();
     glUniform1f(location, value);
 }
 void ShaderProgram::uniform(GLint location, glm::vec2 value) {
-    this->bind();
     glUniform2f(location, value.x, value.y);
 }
 void ShaderProgram::uniform(GLint location, glm::vec3 value) {
-    this->bind();
     glUniform3f(location, value.x, value.y, value.z);
 }
 void ShaderProgram::uniform(GLint location, glm::vec4 value) {
-    this->bind();
     glUniform4f(location, value.x, value.y, value.z, value.w);
 }
 void ShaderProgram::uniform(GLint location, glm::mat2 value) {
-    this->bind();
     glUniformMatrix2fv(location, 1, GL_FALSE, &value[0][0]);
 }
 void ShaderProgram::uniform(GLint location, glm::mat3 value) {
-    this->bind();
     glUniformMatrix3fv(location, 1, GL_FALSE, &value[0][0]);
 }
 void ShaderProgram::uniform(GLint location, glm::mat4 value) {
-    this->bind();
     glUniformMatrix4fv(location, 1, GL_FALSE, &value[0][0]);
+}
+
+void ShaderProgram::uniform(GLint location, fglw::Texture& tex) {
+    glUniform1i(location, tex.getTextureIndex());
 }
 }
