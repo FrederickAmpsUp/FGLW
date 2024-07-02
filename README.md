@@ -53,7 +53,6 @@ public:
     FGLW_ENABLE_APP;
 
     virtual void setup(std::vector<const char *> args) override {
-        std::cout << "TEST" << std::endl;
         mesh = fglw::TriangleMesh<VertexData>();
 
         mesh.add_triangle(
