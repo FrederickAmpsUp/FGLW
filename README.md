@@ -9,7 +9,7 @@ fglw is a lightweight C++ wrapper around OpenGL designed to simplify graphics pr
 - **Shader Program Abstraction:** Manages shader loading, compilation, and uniform management.
 - **Texture Handling:** Simplifies texture loading and binding.
 - **Modern OpenGL:** Leverages OpenGL's latest features and optimizations.
-- **Bindless Rendering:** Utilizes OpenGL bindless capabilities for efficient resource management.
+- **Bindless Rendering:** Simplifies programming and makes code structure management easier.
 
 ## Installation
 
