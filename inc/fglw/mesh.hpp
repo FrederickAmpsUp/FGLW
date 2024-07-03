@@ -50,7 +50,7 @@ public:
         this->ready = false;
     }
 
-    TriangleMesh(std::vector<V> vertices, std::vector<size_t> indices) : TriangleMesh() {
+    TriangleMesh(std::vector<V> vertices, std::vector<GLuint> indices) : TriangleMesh() {
         this->vertices = vertices;
         this->indices = indices;
         this->ready = false;
