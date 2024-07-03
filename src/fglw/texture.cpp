@@ -270,6 +270,10 @@ Texture2D::Texture2D(unsigned int width, unsigned int height, GLenum internalFor
     if (err != GL_NO_ERROR) {
         FGLW_DEBUG_PRINTF("GL error: %s\n", gluErrorString(err));
     }
+
+    this->dataFmt = dataFormat;
+    this->dataType = dataType;
+    this->internalFmt = internalFormat;
 }
 
 Texture2D::Texture2D(unsigned int width, unsigned int height, GLenum dataFormat, GLenum dataType, const void *data, GLenum internalFormat) {
@@ -289,6 +293,17 @@ Texture2D::Texture2D(unsigned int width, unsigned int height, GLenum dataFormat,
 
     this->_width = width;
     this->_height = height;
+
+    this->dataFmt = dataFormat;
+    this->dataType = dataType;
+    this->internalFmt = internalFormat;
+}
+
+void Texture2D::upload(const void *data) {
+    glActiveTexture(GL_TEXTURE0 + this->textureIndex);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, this->internalFmt, this->_width, this->_height, 0, this->dataFmt, this->dataType, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 Texture3D::Texture3D() : Texture3D(1,1,1) {}
@@ -316,6 +331,10 @@ Texture3D::Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum i
     if (err != GL_NO_ERROR) {
         FGLW_DEBUG_PRINTF("GL error: %s\n", gluErrorString(err));
     }
+
+    this->dataFmt = dataFormat;
+    this->dataType = dataType;
+    this->internalFmt = internalFormat;
 }
 
 Texture3D::Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum dataFormat, GLenum dataType, const void *data, GLenum internalFormat) {
@@ -335,6 +354,16 @@ Texture3D::Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum d
     this->_dx = dX;
     this->_dy = dY;
     this->_dz = dZ;
+
+    this->dataFmt = dataFormat;
+    this->dataType = dataType;
+    this->internalFmt = internalFormat;
+}
+
+void Texture3D::upload(const void *data) {
+    glActiveTexture(GL_TEXTURE0 + this->textureIndex);
+
+    glTexImage3D(GL_TEXTURE_3D, 0, this->internalFmt, this->_dx, this->_dy, this->_dz, 0, this->dataFmt, this->dataType, data);
 }
 
 unsigned int Texture::textureCount = 0;

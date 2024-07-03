@@ -68,7 +68,8 @@ public:
         int width, height, channels;
         unsigned char *data = stbi_load("assets/images/test_dev_texture.jpg", &width, &height, &channels, 0);
         if (channels == 3)
-            this->texture0 = fglw::Texture2D(width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+            this->texture0 = fglw::Texture2D(width, height, GL_RGB);
+        this->texture0.upload(data);
 
         stbi_image_free(data);
 

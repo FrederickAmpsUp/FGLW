@@ -9,8 +9,11 @@ public:
     GLenum glTextureEnum() const { return GL_TEXTURE0 + this->textureIndex; }
     unsigned int getTextureIndex() const { return this->textureIndex; }
 
+    virtual void upload(const void *data) = 0;
+
     unsigned int getTextureID() const { return this->textureID; }
 protected:
+    GLenum dataFmt, dataType, internalFmt;
     GLuint textureID;
     unsigned int textureIndex;
     static unsigned int textureCount;
@@ -21,6 +24,8 @@ public:
     Texture2D();
     Texture2D(unsigned int width, unsigned int height, GLenum internalFormat=GL_RGBA32F);
     Texture2D(unsigned int width, unsigned int height, GLenum dataFormat, GLenum dataType, const void *data, GLenum internalFormat=GL_RGBA32F);
+
+    virtual void upload(const void *data) override;
 
     unsigned int width() const { return _width; }
     unsigned int height() const { return _height; }
@@ -36,6 +41,8 @@ public:
     Texture3D();
     Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum internalFormat=GL_RGBA32F);
     Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum dataFormat, GLenum dataType, const void *data, GLenum internalFormat=GL_RGBA32F);
+
+    virtual void upload(const void *data) override;
 
 
     unsigned int dimX() const { return _dx; }
