@@ -45,6 +45,7 @@ public:
         glGenBuffers(1, &this->VBO);
         glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
         glGenBuffers(1, &this->EBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
 
         this->ready = false;
     }
@@ -94,6 +95,8 @@ private:
     void construct() {
         if (this->ready) return;
         this->ready = true;
+        glBindVertexArray(this->VAO);
+
         glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(V), vertices.data(), GL_STATIC_DRAW);
 

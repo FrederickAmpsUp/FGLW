@@ -1,12 +1,11 @@
 #pragma once
 
-#define GLFW_INCLUDE_OPENGL
 #include <GLFW/glfw3.h>
 
 #include <string>
 #include <functional>
 
-#include <fglw/framebuffer.hpp>
+#include <fglw/rendertarget.hpp>
 
 namespace fglw {
 
@@ -23,6 +22,18 @@ public:
     float run_time() const { glfwMakeContextCurrent(this->win); return glfwGetTime(); }
 
     virtual void bind() override;
+
+    unsigned int width() const {
+        int w, h;
+        glfwGetWindowSize(this->win, &w, &h);
+        return w;
+    }
+
+    unsigned int height() const {
+        int w, h;
+        glfwGetWindowSize(this->win, &w, &h);
+        return h;
+    }
 private:
     GLFWwindow *win;
     LoopCallback loop_fn;

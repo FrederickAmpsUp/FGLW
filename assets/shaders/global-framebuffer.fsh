@@ -1,0 +1,11 @@
+#version 330 core
+
+in vec2 uv;
+
+uniform sampler2D framebuffer;
+
+out vec4 FragColor;
+
+void main() {
+    FragColor = texture(framebuffer, uv);
+}

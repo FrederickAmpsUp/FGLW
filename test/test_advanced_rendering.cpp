@@ -18,12 +18,20 @@ struct VertexData {
     }
 };
 
+struct FramebufferQuadVertexData {
+    glm::vec2 uv;
+
+    static const fglw::VertexAttributeLayout layout() {
+        return fglw::VertexAttributeLayout::empty()
+            .add(GL_FLOAT, 2); // uv
+    }
+};
+
 class AdvancedRenderingTest : public fglw::App {
 public:
     FGLW_ENABLE_APP;
 
     virtual void setup(std::vector<const char *> args) override {
-        std::cout << "TEST" << std::endl;
         mesh = fglw::TriangleMesh<VertexData>();
 
         mesh.add_triangle(
@@ -37,7 +45,20 @@ public:
             VertexData{glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f)}
         );
 
+        framebufferQuad = fglw::TriangleMesh<FramebufferQuadVertexData>();
+        framebufferQuad.add_triangle(
+            FramebufferQuadVertexData{glm::vec2(0.0f, 0.0f)},
+            FramebufferQuadVertexData{glm::vec2(1.0f, 0.0f)},
+            FramebufferQuadVertexData{glm::vec2(1.0f, 1.0f)}
+        );
+        framebufferQuad.add_triangle(
+            FramebufferQuadVertexData{glm::vec2(0.0f, 0.0f)},
+            FramebufferQuadVertexData{glm::vec2(1.0f, 1.0f)},
+            FramebufferQuadVertexData{glm::vec2(0.0f, 1.0f)}
+        );
+
         shader = fglw::ShaderProgram::loadGLSLFiles("assets/shaders/02-advanced-rendering.vsh", "assets/shaders/02-advanced-rendering.fsh");
+        framebufferShader = fglw::ShaderProgram::loadGLSLFiles("assets/shaders/global-framebuffer.vsh", "assets/shaders/global-framebuffer.fsh");
 
         this->object = glm::identity<glm::mat4x4>();
         this->view = glm::lookAt(glm::vec3(0.0f, 1.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -57,10 +78,15 @@ public:
 
         this->shader.uniform("tex0", this->texture0);
         this->shader.uniform("tex1", this->texture1);
+
+        this->framebuf = fglw::Framebuffer(800, 600);
+
+        this->framebufferShader.uniform("framebuffer", this->framebuf);
     }
 
     virtual void update() override {
         this->win.clear(glm::vec3(0.1, 0.1, 0.1));
+        this->framebuf.clear(glm::vec3(0.0, 0.0, 0.0));
 
         this->object = glm::identity<glm::mat4x4>();
         this->object = glm::rotate(this->object, this->win.run_time(), glm::vec3(0.1f, 1.0f, 0.0f));
@@ -69,7 +95,9 @@ public:
         this->shader.uniform("view", this->view);
         this->shader.uniform("model", this->object);
 
-        this->mesh.draw(this->win, this->shader);
+        this->mesh.draw(this->framebuf, this->shader);
+
+        this->framebufferQuad.draw(this->win, this->framebufferShader);
     }
     virtual void teardown() override {
 
@@ -77,9 +105,10 @@ public:
 
 private:
     fglw::TriangleMesh<VertexData> mesh;
-    fglw::ShaderProgram shader;
+    fglw::ShaderProgram shader, framebufferShader;
     fglw::Texture2D texture0, texture1;
     fglw::Framebuffer framebuf;
+    fglw::TriangleMesh<FramebufferQuadVertexData> framebufferQuad;
     glm::mat4x4 object, view, projection;
 };
 
