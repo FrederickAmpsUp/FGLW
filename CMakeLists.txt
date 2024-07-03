@@ -21,13 +21,13 @@ else()
 endif()
 
 # Create a static library from the gathered source files
-add_library(flgwDeps STATIC ${SRC_FILES})
+add_library(fglwDeps STATIC ${SRC_FILES})
 
 if(EMSCRIPTEN)
-    target_link_options(flgwDeps PRIVATE "-s USE_GLFW=3" "-s FULL_ES2=1")
+    target_link_options(fglwDeps PRIVATE "-s USE_GLFW=3" "-s FULL_ES2=1")
 else()
     find_package(glfw3 3.3 REQUIRED)
-    target_link_libraries(flgwDeps glfw GL GLU)
+    target_link_libraries(fglwDeps glfw GL GLU)
 endif()
 
 # Gather all source files from test/ (non-recursive)
@@ -39,8 +39,8 @@ foreach(TEST_FILE ${TEST_FILES})
     get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
     # Create the executable
     add_executable(${TEST_NAME} ${TEST_FILE})
-    # Link the executable with the flgwDeps library
-    target_link_libraries(${TEST_NAME} flgwDeps)
+    # Link the executable with the fglwDeps library
+    target_link_libraries(${TEST_NAME} fglwDeps)
 endforeach()
 
 # Gather all source files from run/ (non-recursive)
@@ -52,8 +52,8 @@ foreach(RUN_FILE ${RUN_FILES})
     get_filename_component(RUN_NAME ${RUN_FILE} NAME_WE)
     # Create the executable
     add_executable(${RUN_NAME} ${RUN_FILE})
-    # Link the executable with the flgwDeps library
-    target_link_libraries(${RUN_NAME} flgwDeps)
+    # Link the executable with the fglwDeps library
+    target_link_libraries(${RUN_NAME} fglwDeps)
 endforeach()
 
 # Install the run executables
