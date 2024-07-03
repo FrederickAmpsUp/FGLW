@@ -4,6 +4,43 @@
 #include <string>
 #include <fglw/log.hpp>
 #include <vector>
+#include <filesystem>
+
+static std::string loadFileContents(std::string filename, uint32_t fileIdx=0) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        FGLW_DEBUG_PRINTF("FGLW Error while opening shader: \n\nFailed to open file \"%s\" for reading.\n", filename.c_str());
+        return "";
+    }
+
+    std::ostringstream contentStream;
+    if (fileIdx != 0) contentStream << "#line 1 " << fileIdx << "\n";
+    uint32_t lineIdx = 0;
+    while (file.peek() != EOF) {
+        std::string line;
+        std::getline(file, line);
+
+        if (line.rfind("#include ", 0) == 0) { // include directive
+            std::string arg = line.substr(9);
+            if (arg[0] != '"') {
+                FGLW_DEBUG_PRINTF("FGLW Error while preprocessing shader \"%s\": Expected string after #include directive.", filename.c_str());
+                continue;
+            }
+            size_t rightQuotePos = arg.find("\"", 1); // find the right quote
+            std::string included = arg.substr(1, rightQuotePos-1);
+            std::filesystem::path shaderDir = std::filesystem::path(filename).parent_path();
+            contentStream << "\n" << loadFileContents((shaderDir/std::filesystem::path(included)).string(), fileIdx+1) << "\n";
+            contentStream << "#line " << lineIdx+1 << " " << fileIdx << "\n";
+            continue;
+        }
+
+        contentStream << line << "\n";
+        lineIdx++;
+    }
+
+    file.close();
+    return contentStream.str(); // Convert stringstream to string and return
+}
 
 namespace fglw {
 
@@ -72,27 +109,8 @@ ShaderProgram ShaderProgram::compileGLSL(const std::string& vertSrc, const std::
 }
 
 ShaderProgram ShaderProgram::loadGLSLFiles(const std::string& vertFilename, const std::string& fragFilename) {
-    std::ifstream file(vertFilename);
-    std::stringstream buffer;
-    if (!file.is_open()) {
-        FGLW_DEBUG_PRINTF("Failed to open vertex shader: %s", vertFilename.c_str());
-        return ShaderProgram();
-    }
-
-    buffer << file.rdbuf();
-    file.close();
-    std::string vertSource = buffer.str();
-
-    file = std::ifstream(fragFilename);
-    if (!file.is_open()) {
-        FGLW_DEBUG_PRINTF("Failed to open fragment shader: %s", fragFilename.c_str());
-        return ShaderProgram();
-    }
-    buffer = std::stringstream();
-    buffer << file.rdbuf();
-    file.close();
-
-    std::string fragSource = buffer.str();
+    std::string vertSource = loadFileContents(vertFilename);
+    std::string fragSource = loadFileContents(fragFilename);
 
     return ShaderProgram::compileGLSL(vertSource, fragSource);
 }
