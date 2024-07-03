@@ -10,7 +10,7 @@
 
 namespace fglw {
 
-class Window : public Framebuffer {
+class Window : public RenderTarget {
 public:
     using LoopCallback = std::function<void()>;
 

@@ -74,7 +74,7 @@ public:
         this->ready = false;
     }
 
-    void draw(fglw::Framebuffer& fb, fglw::ShaderProgram& shader) {
+    void draw(fglw::RenderTarget& fb, fglw::ShaderProgram& shader) {
         fb.bind();
         shader.bind();
         this->construct();

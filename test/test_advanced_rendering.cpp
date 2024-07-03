@@ -47,13 +47,13 @@ public:
         int width, height, channels;
         unsigned char *data = stbi_load("assets/images/test_dev_texture.jpg", &width, &height, &channels, 0);
         if (channels == 3)
-            this->texture0 = fglw::Texture(width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+            this->texture0 = fglw::Texture2D(width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
 
         stbi_image_free(data);
 
         data = stbi_load("assets/images/test_nyancat.png", &width, &height, &channels, 0);
         if (channels == 3)
-            this->texture1 = fglw::Texture(width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+            this->texture1 = fglw::Texture2D(width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
 
         this->shader.uniform("tex0", this->texture0);
         this->shader.uniform("tex1", this->texture1);
@@ -78,7 +78,8 @@ public:
 private:
     fglw::TriangleMesh<VertexData> mesh;
     fglw::ShaderProgram shader;
-    fglw::Texture texture0, texture1;
+    fglw::Texture2D texture0, texture1;
+    fglw::Framebuffer framebuf;
     glm::mat4x4 object, view, projection;
 };
 

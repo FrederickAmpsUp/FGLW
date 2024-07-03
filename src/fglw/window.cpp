@@ -36,5 +36,6 @@ void Window::loop() {
 
 void Window::bind() {
     glfwMakeContextCurrent(this->win);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 }
