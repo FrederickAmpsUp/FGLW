@@ -154,7 +154,7 @@ void ShaderProgram::uniform(GLint location, glm::mat4 value) {
     glUniformMatrix4fv(location, 1, GL_FALSE, &value[0][0]);
 }
 
-void ShaderProgram::uniform(GLint location, fglw::Texture2D& tex) {
+void ShaderProgram::uniform(GLint location, fglw::Texture& tex) {
     glUniform1i(location, tex.getTextureIndex());
 }
 }

@@ -33,7 +33,7 @@ public:
     void uniform(GLint location, glm::mat3 value);
     void uniform(GLint location, glm::mat4 value);
 
-    void uniform(GLint location, fglw::Texture2D& value);
+    void uniform(GLint location, fglw::Texture& value);
 
     template<typename T>
     void uniform(const std::string& name, T value) {
