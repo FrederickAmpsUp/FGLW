@@ -1,25 +1,12 @@
 #include <fglw/texture.hpp>
 #include <fglw/log.hpp>
 #include <GL/glu.h>
+#include <tuple>
 
 namespace fglw {
 
-Texture2D::Texture2D() : Texture2D(1, 1) {}
-Texture2D::Texture2D(unsigned int width, unsigned int height, GLenum internalFormat) {
-    this->textureIndex = Texture2D::textureCount++;
-    glActiveTexture(GL_TEXTURE0 + this->textureIndex);
-
-    glGenTextures(1, &this->textureID);
-    glBindTexture(GL_TEXTURE_2D, this->textureID);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    GLenum dataFormat;
-    GLenum dataType;
-
+static std::tuple<GLenum, GLenum> getDataFormat(GLenum internalFormat) {
+    GLenum dataFormat, dataType;
     switch (internalFormat) {
         case GL_DEPTH_COMPONENT:
             dataFormat = GL_DEPTH_COMPONENT;
@@ -255,7 +242,23 @@ Texture2D::Texture2D(unsigned int width, unsigned int height, GLenum internalFor
             FGLW_DEBUG_PRINTF("Unsupported internal format. Defaulting to GL_RGBA and GL_UNSIGNED_BYTE.\n");
             break;
     }
+    return { dataFormat, dataType };
+} 
 
+Texture2D::Texture2D() : Texture2D(1, 1) {}
+Texture2D::Texture2D(unsigned int width, unsigned int height, GLenum internalFormat) {
+    this->textureIndex = Texture::textureCount++;
+    glActiveTexture(GL_TEXTURE0 + this->textureIndex);
+
+    glGenTextures(1, &this->textureID);
+    glBindTexture(GL_TEXTURE_2D, this->textureID);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    const auto [dataFormat, dataType] = getDataFormat(internalFormat);
 
     glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, dataType, nullptr);
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -270,7 +273,7 @@ Texture2D::Texture2D(unsigned int width, unsigned int height, GLenum internalFor
 }
 
 Texture2D::Texture2D(unsigned int width, unsigned int height, GLenum dataFormat, GLenum dataType, const void *data, GLenum internalFormat) {
-    this->textureIndex = Texture2D::textureCount++;
+    this->textureIndex = Texture::textureCount++;
     glActiveTexture(GL_TEXTURE0 + this->textureIndex);
 
     glGenTextures(1, &this->textureID);
@@ -288,5 +291,51 @@ Texture2D::Texture2D(unsigned int width, unsigned int height, GLenum dataFormat,
     this->_height = height;
 }
 
-unsigned int Texture2D::textureCount = 0;
+Texture3D::Texture3D() : Texture3D(1,1,1) {}
+Texture3D::Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum internalFormat) {
+    this->textureIndex = Texture::textureCount++;
+    glActiveTexture(GL_TEXTURE0 + this->textureIndex);
+
+    glGenTextures(1, &this->textureID);
+    glBindTexture(GL_TEXTURE_3D, this->textureID);
+
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    const auto [dataFormat, dataType] = getDataFormat(internalFormat);
+
+    glTexImage3D(GL_TEXTURE_3D, 0, internalFormat, dX, dY, dZ, 0, dataFormat, dataType, nullptr);
+
+    this->_dx = dX;
+    this->_dy = dY;
+    this->_dz = dZ;
+
+    GLenum err = glGetError();
+    if (err != GL_NO_ERROR) {
+        FGLW_DEBUG_PRINTF("GL error: %s\n", gluErrorString(err));
+    }
+}
+
+Texture3D::Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum dataFormat, GLenum dataType, const void *data, GLenum internalFormat) {
+    this->textureIndex = Texture::textureCount++;
+    glActiveTexture(GL_TEXTURE0 + this->textureIndex);
+
+    glGenTextures(1, &this->textureID);
+    glBindTexture(GL_TEXTURE_3D, this->textureID);
+
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    glTexImage3D(GL_TEXTURE_3D, 0, internalFormat, dX, dY, dZ, 0, dataFormat, dataType, data);
+    
+    this->_dx = dX;
+    this->_dy = dY;
+    this->_dz = dZ;
+}
+
+unsigned int Texture::textureCount = 0;
 }
