@@ -1,13 +1,15 @@
 #include <glad/glad.h>
 #include <fglw/framebuffer.hpp>
 #include <iostream>
+#include <limits>
 
 namespace fglw {
 
 void RenderTarget::clear(glm::vec3 color) {
     this->bind();
     glClearColor(color.x, color.y, color.z, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClearDepth(std::numeric_limits<GLdouble>::max());
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 Framebuffer::Framebuffer(unsigned int width, unsigned int height) : Texture2D(width, height, GL_RGBA32F) {
