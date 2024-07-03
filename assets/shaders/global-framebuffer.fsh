@@ -7,5 +7,7 @@ uniform sampler2D framebuffer;
 out vec4 FragColor;
 
 void main() {
-    FragColor = texture(framebuffer, uv);
+    vec3 col = texture(framebuffer, uv).rgb;
+
+    FragColor = vec4(col, 1.0);
 }
