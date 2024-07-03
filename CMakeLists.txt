@@ -21,13 +21,13 @@ else()
 endif()
 
 # Create a static library from the gathered source files
-add_library(deps STATIC ${SRC_FILES})
+add_library(flgwDeps STATIC ${SRC_FILES})
 
 if(EMSCRIPTEN)
-    target_link_options(deps PRIVATE "-s USE_GLFW=3" "-s FULL_ES2=1")
+    target_link_options(flgwDeps PRIVATE "-s USE_GLFW=3" "-s FULL_ES2=1")
 else()
     find_package(glfw3 3.3 REQUIRED)
-    target_link_libraries(deps glfw GL GLU)
+    target_link_libraries(flgwDeps glfw GL GLU)
 endif()
 
 # Gather all source files from test/ (non-recursive)
@@ -39,8 +39,8 @@ foreach(TEST_FILE ${TEST_FILES})
     get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
     # Create the executable
     add_executable(${TEST_NAME} ${TEST_FILE})
-    # Link the executable with the deps library
-    target_link_libraries(${TEST_NAME} deps)
+    # Link the executable with the flgwDeps library
+    target_link_libraries(${TEST_NAME} flgwDeps)
 endforeach()
 
 # Gather all source files from run/ (non-recursive)
@@ -52,11 +52,11 @@ foreach(RUN_FILE ${RUN_FILES})
     get_filename_component(RUN_NAME ${RUN_FILE} NAME_WE)
     # Create the executable
     add_executable(${RUN_NAME} ${RUN_FILE})
-    # Link the executable with the deps library
-    target_link_libraries(${RUN_NAME} deps)
+    # Link the executable with the flgwDeps library
+    target_link_libraries(${RUN_NAME} flgwDeps)
 endforeach()
 
 # Install the run executables
 install(TARGETS ${RUN_NAME} DESTINATION /usr/bin)
 
-file(COPY ${CMAKE_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
