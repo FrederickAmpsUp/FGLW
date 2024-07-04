@@ -318,6 +318,7 @@ Texture3D::Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum i
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
     const auto [dataFormat, dataType] = getDataFormat(internalFormat);
 
@@ -348,6 +349,7 @@ Texture3D::Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum d
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     
     glTexImage3D(GL_TEXTURE_3D, 0, internalFormat, dX, dY, dZ, 0, dataFormat, dataType, data);
     
@@ -362,6 +364,7 @@ Texture3D::Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum d
 
 void Texture3D::upload(const void *data) {
     glActiveTexture(GL_TEXTURE0 + this->textureIndex);
+    glBindTexture(GL_TEXTURE_3D, this->textureID);
 
     glTexImage3D(GL_TEXTURE_3D, 0, this->internalFmt, this->_dx, this->_dy, this->_dz, 0, this->dataFmt, this->dataType, data);
 }

@@ -33,7 +33,6 @@ private:
     unsigned int _width, _height;
 
 protected:
-    static unsigned int textureCount;
 };
 
 class Texture3D : public Texture {
@@ -43,7 +42,6 @@ public:
     Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum dataFormat, GLenum dataType, const void *data, GLenum internalFormat=GL_RGBA32F);
 
     virtual void upload(const void *data) override;
-
 
     unsigned int dimX() const { return _dx; }
     unsigned int dimY() const { return _dy; }
