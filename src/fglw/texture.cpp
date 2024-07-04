@@ -328,11 +328,6 @@ Texture3D::Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum i
     this->_dy = dY;
     this->_dz = dZ;
 
-    GLenum err = glGetError();
-    if (err != GL_NO_ERROR) {
-        FGLW_DEBUG_PRINTF("GL error: %s\n", gluErrorString(err));
-    }
-
     this->dataFmt = dataFormat;
     this->dataType = dataType;
     this->internalFmt = internalFormat;
@@ -340,6 +335,7 @@ Texture3D::Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum i
 
 Texture3D::Texture3D(unsigned int dX, unsigned int dY, unsigned int dZ, GLenum dataFormat, GLenum dataType, const void *data, GLenum internalFormat) {
     this->textureIndex = Texture::textureCount++;
+
     glActiveTexture(GL_TEXTURE0 + this->textureIndex);
 
     glGenTextures(1, &this->textureID);
@@ -366,7 +362,7 @@ void Texture3D::upload(const void *data) {
     glActiveTexture(GL_TEXTURE0 + this->textureIndex);
     glBindTexture(GL_TEXTURE_3D, this->textureID);
 
-    glTexImage3D(GL_TEXTURE_3D, 0, this->internalFmt, this->_dx, this->_dy, this->_dz, 0, this->dataFmt, this->dataType, data);
+    glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, this->_dx, this->_dy, this->_dz, this->dataFmt, this->dataType, data);
 }
 
 unsigned int Texture::textureCount = 0;
