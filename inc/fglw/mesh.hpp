@@ -89,6 +89,7 @@ public:
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
 
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
         glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
     }

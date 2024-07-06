@@ -132,6 +132,19 @@ void ShaderProgram::uniform(GLint location, glm::ivec4 value) {
     glUniform4i(location, value.x, value.y, value.z, value.w);
 }
 
+void ShaderProgram::uniform(GLint location, unsigned int value) {
+    glUniform1ui(location, value);
+}
+void ShaderProgram::uniform(GLint location, glm::uvec2 value) {
+    glUniform2ui(location, value.x, value.y);
+}
+void ShaderProgram::uniform(GLint location, glm::uvec3 value) {
+    glUniform3ui(location, value.x, value.y, value.z);
+}
+void ShaderProgram::uniform(GLint location, glm::uvec4 value) {
+    glUniform4ui(location, value.x, value.y, value.z, value.w);
+}
+
 void ShaderProgram::uniform(GLint location, float value) {
     glUniform1f(location, value);
 }

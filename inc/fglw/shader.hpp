@@ -25,6 +25,11 @@ public:
     void uniform(GLint location, glm::ivec3 value);
     void uniform(GLint location, glm::ivec4 value);
 
+    void uniform(GLint location, unsigned int value);
+    void uniform(GLint location, glm::uvec2 value);
+    void uniform(GLint location, glm::uvec3 value);
+    void uniform(GLint location, glm::uvec4 value);
+
     void uniform(GLint location, float value);
     void uniform(GLint location, glm::vec2 value);
     void uniform(GLint location, glm::vec3 value);
