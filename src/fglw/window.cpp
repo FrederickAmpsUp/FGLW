@@ -27,6 +27,7 @@ void Window::loop() {
     while (!glfwWindowShouldClose(this->win)) {
         this->loop_fn();
 
+        glfwSwapInterval(0);
         glfwSwapBuffers(this->win);
         glfwPollEvents();
     }
