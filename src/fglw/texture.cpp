@@ -246,7 +246,7 @@ static std::tuple<GLenum, GLenum> getDataFormat(GLenum internalFormat) {
 } 
 
 
-Texture1D::Texture1D() : Texture1D(1, 1) {}
+Texture1D::Texture1D() : Texture1D(1) {}
 Texture1D::Texture1D(unsigned int sz, GLenum internalFormat) {
     this->textureIndex = Texture::textureCount++;
     glActiveTexture(GL_TEXTURE0 + this->textureIndex);
