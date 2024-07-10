@@ -19,6 +19,21 @@ protected:
     static unsigned int textureCount;
 };
 
+class Texture1D : public Texture {
+public:
+    Texture1D();
+    Texture1D(unsigned int sz, GLenum internalFormat=GL_RGBA32F);
+    Texture1D(unsigned int sz, GLenum dataFormat, GLenum dataType, const void *data, GLenum internalFormat=GL_RGBA32F);
+
+    virtual void upload(const void *data) override;
+
+    unsigned int size() const { return this->_sz;}
+private:
+    unsigned int _sz;
+
+protected:
+};
+
 class Texture2D : public Texture {
 public:
     Texture2D();

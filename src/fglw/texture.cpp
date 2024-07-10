@@ -245,6 +245,58 @@ static std::tuple<GLenum, GLenum> getDataFormat(GLenum internalFormat) {
     return { dataFormat, dataType };
 } 
 
+
+Texture1D::Texture1D() : Texture1D(1, 1) {}
+Texture1D::Texture1D(unsigned int sz, GLenum internalFormat) {
+    this->textureIndex = Texture::textureCount++;
+    glActiveTexture(GL_TEXTURE0 + this->textureIndex);
+
+    glGenTextures(1, &this->textureID);
+    glBindTexture(GL_TEXTURE_1D, this->textureID);
+
+    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    const auto [dataFormat, dataType] = getDataFormat(internalFormat);
+    
+    glTexImage1D(GL_TEXTURE_1D, 0, internalFormat, sz, 0, dataFormat, dataType, nullptr);
+
+    this->_sz = sz;
+
+    this->dataFmt = dataFormat;
+    this->dataType = dataType;
+    this->internalFmt = internalFormat;
+}
+
+Texture1D::Texture1D(unsigned int sz, GLenum dataFormat, GLenum dataType, const void *data, GLenum internalFormat) {
+    this->textureIndex = Texture::textureCount++;
+    glActiveTexture(GL_TEXTURE0 + this->textureIndex);
+
+    glGenTextures(1, &this->textureID);
+    glBindTexture(GL_TEXTURE_1D, this->textureID);
+
+    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    glTexImage1D(GL_TEXTURE_1D, 0, internalFormat, sz, 0, dataFormat, dataType, data);
+
+    this->_sz = sz;
+
+    this->dataFmt = dataFormat;
+    this->dataType = dataType;
+    this->internalFmt = internalFormat;
+}
+
+void Texture1D::upload(const void *data) {
+    glActiveTexture(GL_TEXTURE0 + this->textureIndex);
+
+    glTexImage1D(GL_TEXTURE_1D, 0, this->internalFmt, this->_sz, 0, this->dataFmt, this->dataType, data);
+}
+
 Texture2D::Texture2D() : Texture2D(1, 1) {}
 Texture2D::Texture2D(unsigned int width, unsigned int height, GLenum internalFormat) {
     this->textureIndex = Texture::textureCount++;
